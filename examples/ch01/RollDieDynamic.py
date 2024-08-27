@@ -6,6 +6,29 @@ import random
 import seaborn as sns
 import sys
 
+# Check if the required number of command-line arguments are provided
+if len(sys.argv) == 3:
+    try:
+        number_of_frames = int(sys.argv[1])
+        rolls_per_frame = int(sys.argv[2])
+    except ValueError:
+        print("Arguments must be integers.")
+        sys.exit(1)
+    if number_of_frames <= 0 or rolls_per_frame <= 0:
+        print("Arguments must be positive integers.")
+        sys.exit(1)
+else:
+    print("You didn't provide the arguments at start.")
+    try:
+        number_of_frames = int(input("Enter the number of frames: "))
+        rolls_per_frame = int(input("Enter the number of rolls per frame: "))
+        if number_of_frames <= 0 or rolls_per_frame <= 0:
+            print("Both numbers must be positive integers.")
+            sys.exit(1)
+    except ValueError:
+        print("Both inputs must be integers.")
+        sys.exit(1)
+
 def update(frame_number, rolls, faces, frequencies):
     """Configures bar plot contents for each animation frame."""
     # roll die and update frequencies
@@ -26,10 +49,6 @@ def update(frame_number, rolls, faces, frequencies):
         text = f'{frequency:,}\n{frequency / sum(frequencies):.3%}'
         axes.text(text_x, text_y, text, ha='center', va='bottom')
 
-# read command-line arguments for number of frames and rolls per frame
-number_of_frames = int(sys.argv[1])  
-rolls_per_frame = int(sys.argv[2])  
-
 sns.set_style('whitegrid')  # white backround with gray grid lines
 figure = plt.figure('Rolling a Six-Sided Die')  # Figure for animation
 values = list(range(1, 7))  # die faces for display on x-axis
@@ -39,21 +58,4 @@ frequencies = [0] * 6  # six-element list of die frequencies
 die_animation = animation.FuncAnimation(
     figure, update, repeat=False, frames=number_of_frames - 1, interval=33,
     fargs=(rolls_per_frame, values, frequencies))
-
 plt.show()  # display window
-
-
-#**************************************************************************
-#* (C) Copyright 1992-2018 by Deitel & Associates, Inc. and               *
-#* Pearson Education, Inc. All Rights Reserved.                           *
-#*                                                                        *
-#* DISCLAIMER: The authors and publisher of this book have used their     *
-#* best efforts in preparing the book. These efforts include the          *
-#* development, research, and testing of the theories and programs        *
-#* to determine their effectiveness. The authors and publisher make       *
-#* no warranty of any kind, expressed or implied, with regard to these    *
-#* programs or to the documentation contained in these books. The authors *
-#* and publisher shall not be liable in any event for incidental or       *
-#* consequential damages in connection with, or arising out of, the       *
-#* furnishing, performance, or use of these programs.                     *
-#**************************************************************************
